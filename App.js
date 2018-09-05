@@ -11,6 +11,7 @@ import { Constants } from 'expo';
 import DeckDetails from './components/DeckDetails';
 import AddCard from './components/AddCard';
 import TakeQuiz from './components/TakeQuiz';
+import { setLocalNotification } from './utils/notifications';
 
 const Tabs = createBottomTabNavigator({
   'Deck List': {
@@ -88,6 +89,10 @@ const MainNavigator = createStackNavigator({
 })
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    return setLocalNotification()
+  }
 
   render() {
     return (

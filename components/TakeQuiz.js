@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
+import { clearLocalNotifications, setLocalNotification } from '../utils/notifications';
 
 class TakeQuiz extends Component {
 
@@ -27,6 +28,8 @@ class TakeQuiz extends Component {
     const totalCards = deck.questions.length;
     if (this.state.cardId + 1 === totalCards) {
       this.setState({ complete: true });
+      clearLocalNotifications()
+        .then(setLocalNotification)
     } else {
       this.setState((state) => ({
         cardId: state.cardId + 1
