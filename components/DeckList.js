@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
+import { AppLoading} from 'expo';
 
 
 const styles = StyleSheet.create({
@@ -43,18 +44,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'grey'
   }
-})
+});
 
 
 class DeckList extends Component {
 
+  state = {
+    ready: false,
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
-    getDecks().then((decks) => dispatch(receiveDecks(decks)));
+    getDecks()
+      .then((decks) => {
+        dispatch(receiveDecks(decks))})
+      .then(() => this.setState(() => ({ready: true})));
   }
 
   renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.item}>
+    <TouchableOpacity 
+      style={styles.item}
+      onPress={() => this.props.navigation.navigate(
+        'DeckDetails',
+        { id: item.key }
+    )}>
      <Text style={styles.title}>{this.props.decks[item.key].title}</Text>
      <Text style={styles.text}>{this.props.decks[item.key].questions.length} Cards</Text>
     </TouchableOpacity>
@@ -62,7 +75,12 @@ class DeckList extends Component {
 
   render() {
     const { decks } = this.props;
+    const { ready } = this.state;
     const deckids = Object.keys(decks).map((id) => ({'key': id}))
+
+    if (ready === false) {
+      return <AppLoading />
+    }
 
     return (
       <View style={styles.container}>
