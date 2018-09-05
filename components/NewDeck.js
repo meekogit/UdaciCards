@@ -67,7 +67,7 @@ class NewDeck extends Component {
 
   handleSubmit = () => {
 
-      const text = this.state;
+      const { text } = this.state;
       const deck = {
         [text]: {
           title: text,
@@ -78,15 +78,18 @@ class NewDeck extends Component {
       this.props.dispatch(addDeck(deck));
   
       this.setState(() => ({ text: '' }));
+
       saveDeck(deck);
 
-      //TODO: Redirect Home or to the newly created deck?
+      this.props.navigation.navigate('AddCard', {id: text});
   }
 
   render() {
+    console.log(this.props.navigation.navigate)
+    const { text } = this.state;
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <Text>{this.state.text}</Text>
+      <Text>{text}</Text>
         <View style={styles.textContainer}>
           <Text style={styles.title}>What is the title of your new deck?</Text>
         </View>
@@ -96,12 +99,13 @@ class NewDeck extends Component {
             onChangeText={this.handleChangeText}
             style={styles.input}
           >
-            {this.state.text}
+            {text}
           </TextInput>
         </View>
         <TouchableOpacity 
           style={styles.buttonContainer}
           onPress={this.handleSubmit}
+          disabled={text === '' ? true : false}
         >
           <Text style={[styles.button]}>Create</Text>
         </TouchableOpacity>
