@@ -1,4 +1,6 @@
 
+import { AsyncStorage } from 'react-native';
+
 export const DECKS_STORAGE_KEY = 'UdaciCards:decks'
 
 const dummyDecks = {
@@ -26,8 +28,8 @@ const dummyDecks = {
   }
 };
 
-export function formatDecks(decks) {
-  return decks === null
-    ? dummyDecks
-    : decks;
+export function formatDecks(results) {
+  return results === null
+    ? () => AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(dummyDecks))
+    : JSON.parse(results)
 }
