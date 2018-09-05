@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getDecks } from '../utils/api';
+import { receiveDecks } from '../actions';
 import {
   View, 
   Text,
@@ -8,29 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-class DeckList extends Component {
-
-  renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.item}>
-     <Text style={styles.title}>{this.props.decks[item.key].title}</Text>
-     <Text style={styles.text}>{this.props.decks[item.key].questions.length} Cards</Text>
-    </TouchableOpacity>
-  )
-
-  render() {
-    const { decks } = this.props;
-    const deckids = Object.keys(decks).map((id) => ({'key': id}))
-
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={deckids}
-          renderItem={this.renderItem}
-        />
-      </View>
-    )
-  }
-}
 
 const styles = StyleSheet.create({
   item: {
@@ -65,4 +45,40 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DeckList;
+
+class DeckList extends Component {
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    getDecks().then((decks) => dispatch(receiveDecks(decks)));
+  }
+
+  renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.item}>
+     <Text style={styles.title}>{this.props.decks[item.key].title}</Text>
+     <Text style={styles.text}>{this.props.decks[item.key].questions.length} Cards</Text>
+    </TouchableOpacity>
+  )
+
+  render() {
+    const { decks } = this.props;
+    const deckids = Object.keys(decks).map((id) => ({'key': id}))
+
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={deckids}
+          renderItem={this.renderItem}
+        />
+      </View>
+    )
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    decks: state
+  }
+}
+
+export default connect(mapStateToProps)(DeckList);
