@@ -85,7 +85,6 @@ class NewDeck extends Component {
   }
 
   render() {
-    console.log(this.props.navigation.navigate)
     const { text } = this.state;
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
