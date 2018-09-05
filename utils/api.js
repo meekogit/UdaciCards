@@ -5,3 +5,7 @@ export function getDecks() {
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then(formatDecks)
 }
+
+export function saveDeck(deck) {
+  return AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(deck))
+}
